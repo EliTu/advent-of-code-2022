@@ -18,16 +18,19 @@ interface StrategyData {
 }
 
 const strategyDataGuide: Record<MyShape, StrategyData> = {
+	// Rock
 	X: {
 		points: 1,
 		winsAgainstShape: 'C',
 		losesToShape: 'B',
 	},
+	// Paper
 	Y: {
 		points: 2,
 		winsAgainstShape: 'A',
 		losesToShape: 'C',
 	},
+	// Scissors
 	Z: {
 		points: 3,
 		winsAgainstShape: 'B',
