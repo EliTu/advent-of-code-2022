@@ -17,22 +17,51 @@ interface StrategyData {
 	losesToShape: OpponentShape;
 }
 
+/**
+Rock - 1 point
+Paper - 2 points
+Scissors - 3 points
+
+Lose - 0 points
+Draw - 3 points
+Win - 6 points
+*/
+type Shapes = 'rock' | 'paper' | 'scissors';
+type Results = 'lose' | 'draw' | 'win';
+interface PointsMap {
+	shape: Record<Shapes, number>;
+	result: Record<Results, number>;
+}
+
+const pointsMap: PointsMap = {
+	shape: {
+		rock: 1,
+		paper: 2,
+		scissors: 3,
+	},
+	result: {
+		lose: 0,
+		draw: 3,
+		win: 6,
+	},
+};
+
 const strategyDataGuide: Record<MyShape, StrategyData> = {
 	// Rock
 	X: {
-		points: 1,
+		points: pointsMap.shape.rock,
 		winsAgainstShape: 'C',
 		losesToShape: 'B',
 	},
 	// Paper
 	Y: {
-		points: 2,
+		points: pointsMap.shape.paper,
 		winsAgainstShape: 'A',
 		losesToShape: 'C',
 	},
 	// Scissors
 	Z: {
-		points: 3,
+		points: pointsMap.shape.scissors,
 		winsAgainstShape: 'B',
 		losesToShape: 'A',
 	},
@@ -48,9 +77,9 @@ const totalPoints = splitInput.reduce((total, roundInfo) => {
 	let roundPoints = points;
 
 	// it's a draw
-	if (opponentShape !== losesToShape && opponentShape !== winsAgainstShape) roundPoints += 3;
+	if (opponentShape !== losesToShape && opponentShape !== winsAgainstShape) roundPoints += pointsMap.result.draw;
 	// it's a win
-	if (opponentShape === winsAgainstShape) roundPoints += 6;
+	if (opponentShape === winsAgainstShape) roundPoints += pointsMap.result.win;
 	// in case of lose, nothing changes as it is 0 points
 
 	return total + roundPoints;
@@ -63,34 +92,28 @@ console.log(totalPoints); // 11873
  * Answer: 12014
  */
 
-// Rock - 1 point
-// Paper - 2 points
-// Scissors - 3 points
-
-// Lose - 0 points
-// Draw - 3 points
-// Win - 6 points
-
 type StrategyToPointsMap = Record<MyShape, number>;
+
+const { shape, result } = pointsMap;
 
 const updatedStrategyGuide: Record<OpponentShape, StrategyToPointsMap> = {
 	// Opponent chooses rock
 	A: {
-		X: 3, // lose - pick scissors
-		Y: 4, // draw - pick rock
-		Z: 8, // win - pick paper
+		X: shape.scissors + result.lose, // lose - pick scissors
+		Y: shape.rock + result.draw, // draw - pick rock
+		Z: shape.paper + result.win, // win - pick paper
 	},
 	// Opponent chooses paper
 	B: {
-		X: 1, // lose - choose rock
-		Y: 5, // draw - pick paper
-		Z: 9, // win - pick scissors
+		X: shape.rock + result.lose, // lose - choose rock
+		Y: shape.paper + result.draw, // draw - pick paper
+		Z: shape.scissors + result.win, // win - pick scissors
 	},
 	// Opponent chooses scissors
 	C: {
-		X: 2, // lose - choose paper
-		Y: 6, // draw - choose scissors
-		Z: 7, // win - choose rock
+		X: shape.paper + result.lose, // lose - choose paper
+		Y: shape.scissors + result.draw, // draw - choose scissors
+		Z: shape.rock + result.win, // win - choose rock
 	},
 };
 
