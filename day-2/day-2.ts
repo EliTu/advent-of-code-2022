@@ -45,16 +45,12 @@ const totalPoints = splitInput.reduce((total, roundInfo) => {
 	const [opponentShape, myShape] = roundInfo.split(' ');
 	const { losesToShape, points, winsAgainstShape } = strategyDataGuide[myShape as MyShape];
 
-	let roundPoints: number = points;
+	let roundPoints = points;
 
 	// it's a draw
-	if (opponentShape !== losesToShape && opponentShape !== winsAgainstShape) {
-		roundPoints += 3;
-	}
+	if (opponentShape !== losesToShape && opponentShape !== winsAgainstShape) roundPoints += 3;
 	// it's a win
-	if (opponentShape === winsAgainstShape) {
-		roundPoints += 6;
-	}
+	if (opponentShape === winsAgainstShape) roundPoints += 6;
 	// in case of lose, nothing changes as it is 0 points
 
 	return total + roundPoints;
