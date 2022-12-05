@@ -9,14 +9,6 @@ import { readFileSync } from 'fs';
  * Answer: 11873
  */
 
-type MyShape = 'X' | 'Y' | 'Z';
-type OpponentShape = 'A' | 'B' | 'C';
-interface StrategyData {
-	points: number;
-	winsAgainstShape: OpponentShape;
-	losesToShape: OpponentShape;
-}
-
 /**
 Rock - 1 point
 Paper - 2 points
@@ -32,7 +24,6 @@ interface PointsMap {
 	shape: Record<Shapes, number>;
 	result: Record<Results, number>;
 }
-
 const pointsMap: PointsMap = {
 	shape: {
 		rock: 1,
@@ -46,6 +37,13 @@ const pointsMap: PointsMap = {
 	},
 };
 
+type MyShape = 'X' | 'Y' | 'Z';
+type OpponentShape = 'A' | 'B' | 'C';
+interface StrategyData {
+	points: number;
+	winsAgainstShape: OpponentShape;
+	losesToShape: OpponentShape;
+}
 const strategyDataGuide: Record<MyShape, StrategyData> = {
 	// Rock
 	X: {
