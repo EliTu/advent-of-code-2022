@@ -10,8 +10,8 @@ const sectionsData = inputText.split('\n');
 type SectionName = 'firstSection' | 'secondSection';
 type SectionsDataArray = Record<SectionName, [number, number]>[];
 
-// Change the sections data into an array of 2 number arrays
-const sectionNumbersData = sectionsData.reduce<SectionsDataArray>((sectionsDataArray, currentSectionData) => {
+// Swap the sections input data into an array of 2 number arrays, so from '1-4, 3-4' -> [{firstSection: [1, 4], secondSection: [3, 4]}]
+const mappedSectionDataArr = sectionsData.reduce<SectionsDataArray>((sectionsDataArray, currentSectionData) => {
 	const [firstSection, secondSection] = currentSectionData.split(',') as [string, string];
 	return [
 		...sectionsDataArray,
@@ -27,7 +27,7 @@ const sectionNumbersData = sectionsData.reduce<SectionsDataArray>((sectionsDataA
  * Answer - 471
  */
 
-const numberOfOverlaps = sectionNumbersData.reduce((total, { firstSection, secondSection }) => {
+const numberOfContainedOverlaps = mappedSectionDataArr.reduce((total, { firstSection, secondSection }) => {
 	const [firstSectionLowerBound, firstSectionUpperBound] = firstSection;
 	const [secondSectionLowerBound, secondSectionUpperBound] = secondSection;
 
@@ -41,14 +41,14 @@ const numberOfOverlaps = sectionNumbersData.reduce((total, { firstSection, secon
 	return total;
 }, 0);
 
-console.log(numberOfOverlaps); // 471
+console.log(numberOfContainedOverlaps); // 471
 
 /**
  * Part 2 - In how many assignment pairs do the ranges overlap?
  * Answer - 888
  */
 
-const numberOfOverlaps2 = sectionNumbersData.reduce((total, { firstSection, secondSection }) => {
+const numberOfAnyOverlaps = mappedSectionDataArr.reduce((total, { firstSection, secondSection }) => {
 	const [firstSectionLowerBound, firstSectionUpperBound] = firstSection;
 	const [secondSectionLowerBound, secondSectionUpperBound] = secondSection;
 
@@ -60,4 +60,4 @@ const numberOfOverlaps2 = sectionNumbersData.reduce((total, { firstSection, seco
 	return total;
 }, 0);
 
-console.log(numberOfOverlaps2); // 888
+console.log(numberOfAnyOverlaps); // 888
