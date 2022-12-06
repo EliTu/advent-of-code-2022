@@ -45,14 +45,14 @@ console.log(sumOfPriorities); // 7428
 
 /**
  * Part 2 - Find the item type that corresponds to the badges of each three-Elf group. What is the sum of the priorities of those item types?
+ * Answer: 2650
  */
 
-let rucksackDataClone = [...rucksackData];
+// Generate a new data array where the rucksack strings are in a group of three inside a sub array
 const groupsOfThreeRucksacks: [string, string, string][] = [];
-
-for (let i = 0; i < rucksackDataClone.length; i + 3) {
-	const rucksackDataToPush = rucksackDataClone.splice(i, 3);
-	groupsOfThreeRucksacks.push(rucksackDataToPush as [string, string, string]);
+for (let i = 0; i < rucksackData.length; i += 3) {
+	const [[first, second, third]] = rucksackData.slice(i, i + 3);
+	groupsOfThreeRucksacks.push([first, second, third]);
 }
 
 const sumOfPriorities2 = groupsOfThreeRucksacks.reduce((acc, rucksackData) => {
@@ -67,4 +67,4 @@ const sumOfPriorities2 = groupsOfThreeRucksacks.reduce((acc, rucksackData) => {
 	return acc + priorityPoints;
 }, 0);
 
-console.log(sumOfPriorities2);
+console.log(sumOfPriorities2); // 2650
