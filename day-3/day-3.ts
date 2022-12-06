@@ -13,18 +13,23 @@ const inputText = readFileSync('./input.txt', 'utf-8');
 const rucksackData = inputText.split('\n');
 
 const priorityItems = 'abcdefghijklmnopqrstuvwxyz';
-const lowerCasePrioritiesPointsMap = priorityItems
-	.split('')
-	.reduce<Record<string, number>>((acc, curr, i) => ({ ...acc, [curr]: 1 + i }), {});
-const upperCasePrioritiesPointsMap = priorityItems
-	.split('')
-	.reduce<Record<string, number>>((acc, curr, i) => ({ ...acc, [curr.toUpperCase()]: 27 + i }), {});
+const generatePrioritiesPointsMap = (isUpperCase = false) =>
+	priorityItems
+		.split('')
+		.reduce<Record<string, number>>(
+			(acc, curr, i) => ({ ...acc, [isUpperCase ? curr.toUpperCase() : curr]: (isUpperCase ? 27 : 1) + i }),
+			{}
+		);
+
+const lowerCasePrioritiesPointsMap = generatePrioritiesPointsMap();
+const upperCasePrioritiesPointsMap = generatePrioritiesPointsMap(true);
 
 const sumOfPriorities = rucksackData.reduce((acc, rucksack) => {
-	const middleIndex = rucksack.length / 2;
+	const length = rucksack.length;
+	const middleIndex = length / 2;
 
 	const firstRucksack = rucksack.slice(0, middleIndex);
-	const secondRucksack = rucksack.slice(middleIndex, rucksack.length);
+	const secondRucksack = rucksack.slice(middleIndex, length);
 
 	const duplicateItem = firstRucksack.split('').find((item) => secondRucksack.includes(item));
 
