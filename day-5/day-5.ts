@@ -15,7 +15,8 @@ import { readFileSync } from 'fs';
 // [R] [P] [W] [N] [M] [P] [R] [Q] [L]
 //  1   2   3   4   5   6   7   8   9
 
-const initStacks: Record<number, string[]> = {
+type StacksData = Record<number, string[]>;
+const initStacks: StacksData = {
 	1: ['R', 'N', 'F', 'V', 'L', 'J', 'S', 'M'],
 	2: ['P', 'N', 'D', 'Z', 'F', 'J', 'W', 'H'],
 	3: ['W', 'R', 'C', 'D', 'G'],
@@ -35,7 +36,7 @@ const instructions = inputText.split('\n');
  * Answer: QPJPLMNNR
  */
 
-const stacksClone = { ...initStacks };
+const stacksClone = deepCloneStacksData();
 
 for (let i = 0; i < instructions.length; i++) {
 	const currentInstruction = instructions[i];
@@ -63,9 +64,7 @@ const topCrates = generateTopCratesString(stacksClone);
  * Answer:
  */
 
-console.log(initStacks);
-
-const stacksClone2 = { ...initStacks };
+const stacksClone2 = deepCloneStacksData();
 
 for (let i = 0; i < instructions.length; i++) {
 	const currentInstruction = instructions[i];
@@ -74,12 +73,18 @@ for (let i = 0; i < instructions.length; i++) {
 
 	// Go over the number of crate moves per instruction and move from the designated stack to the target stack
 	const crates = stacksClone2[fromStack].splice(stacksClone2[fromStack].length - moveQuant, moveQuant);
-
 	stacksClone2[toStack].concat(...crates);
 }
 
 const topCrates2 = generateTopCratesString(stacksClone2);
+console.log(topCrates2);
 
-function generateTopCratesString(stack: Record<number, string[]>) {
+/* Helpers */
+
+function deepCloneStacksData() {
+	return Object.entries(initStacks).reduce<StacksData>((acc, curr) => ({ ...acc, [curr[0]]: [...curr[1]] }), {});
+}
+
+function generateTopCratesString(stack: StacksData) {
 	return Object.values(stack).reduce((crates, currentStack) => crates.concat(currentStack.at(-1) || ''), '');
 }
