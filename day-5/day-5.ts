@@ -15,7 +15,7 @@ import { readFileSync } from 'fs';
 // [R] [P] [W] [N] [M] [P] [R] [Q] [L]
 //  1   2   3   4   5   6   7   8   9
 
-const stacks: Record<number, string[]> = {
+const initStacks: Record<number, string[]> = {
 	1: ['R', 'N', 'F', 'V', 'L', 'J', 'S', 'M'],
 	2: ['P', 'N', 'D', 'Z', 'F', 'J', 'W', 'H'],
 	3: ['W', 'R', 'C', 'D', 'G'],
@@ -35,23 +35,51 @@ const instructions = inputText.split('\n');
  * Answer: QPJPLMNNR
  */
 
+const stacksClone = { ...initStacks };
+
 for (let i = 0; i < instructions.length; i++) {
-	const instruction = instructions[i];
+	const currentInstruction = instructions[i];
 	// Remove the string instructions to have only the numerical data
-	const numbersData = instruction.replace(/[a-z]/gi, '');
+	const instructionNumbers = currentInstruction.replace(/[a-z]/gi, '');
 	// Remove the white-spaces and convert the data to numbers that are extracted per instruction
-	const [moveQuant, fromStack, toStack] = numbersData.split(' ').filter(Boolean).map(Number);
+	const [moveQuant, fromStack, toStack] = instructionNumbers.split(' ').filter(Boolean).map(Number);
 
 	// Go over the number of crate moves per instruction and move from the designated stack to the target stack
 	for (let j = 0; j < moveQuant; j++) {
-		const movedCrate = stacks[fromStack].pop();
+		const movedCrate = stacksClone[fromStack].pop();
 		if (movedCrate) {
-			stacks[toStack].push(movedCrate);
+			stacksClone[toStack].push(movedCrate);
 		}
 	}
 }
 
 // Create a string of the crates on the top of each stack
-const topCrates = Object.values(stacks).reduce((crates, currentStack) => crates.concat(currentStack.at(-1) || ''), '');
+const topCrates = generateTopCratesString(stacksClone);
 
-console.log(topCrates); // QPJPLMNNR
+// console.log(topCrates); // QPJPLMNNR
+
+/**
+ * Part 2 -  After the rearrangement procedure completes, what crate ends up on top of each stack?
+ * Answer:
+ */
+
+console.log(initStacks);
+
+const stacksClone2 = { ...initStacks };
+
+for (let i = 0; i < instructions.length; i++) {
+	const currentInstruction = instructions[i];
+	const instructionNumbers = currentInstruction.replace(/[a-z]/gi, '');
+	const [moveQuant, fromStack, toStack] = instructionNumbers.split(' ').filter(Boolean).map(Number);
+
+	// Go over the number of crate moves per instruction and move from the designated stack to the target stack
+	const crates = stacksClone2[fromStack].splice(stacksClone2[fromStack].length - moveQuant, moveQuant);
+
+	stacksClone2[toStack].concat(...crates);
+}
+
+const topCrates2 = generateTopCratesString(stacksClone2);
+
+function generateTopCratesString(stack: Record<number, string[]>) {
+	return Object.values(stack).reduce((crates, currentStack) => crates.concat(currentStack.at(-1) || ''), '');
+}
