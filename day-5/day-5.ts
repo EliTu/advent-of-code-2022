@@ -27,12 +27,15 @@ const stacks: Record<number, string[]> = {
 	9: ['L', 'M', 'H', 'Z', 'N', 'F'],
 };
 
-console.log('initstacks', stacks);
-
 const inputText = readFileSync('./input.txt', 'utf-8');
 const instructions = inputText.split('\n');
 
-for (let i = 0; i < 4; i++) {
+/**
+ * After the rearrangement procedure completes, what crate ends up on top of each stack?
+ * Answer: QPJPLMNNR
+ */
+
+for (let i = 0; i < instructions.length; i++) {
 	const instruction = instructions[i];
 	const numbersData = instruction.replace(/[a-z]/gi, '');
 
@@ -47,4 +50,6 @@ for (let i = 0; i < 4; i++) {
 	}
 }
 
-console.log('after', stacks);
+const topCrates = Object.values(stacks).reduce((crates, currentStack) => `${crates}${currentStack.at(-1)}`, '');
+
+console.log(topCrates); // QPJPLMNNR
