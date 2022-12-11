@@ -37,19 +37,21 @@ const instructions = inputText.split('\n');
 
 for (let i = 0; i < instructions.length; i++) {
 	const instruction = instructions[i];
+	// Remove the string instructions to have only the numerical data
 	const numbersData = instruction.replace(/[a-z]/gi, '');
-
+	// Remove the white-spaces and convert the data to numbers that are extracted per instruction
 	const [moveQuant, fromStack, toStack] = numbersData.split(' ').filter(Boolean).map(Number);
 
+	// Go over the number of crate moves per instruction and move from the designated stack to the target stack
 	for (let j = 0; j < moveQuant; j++) {
 		const movedCrate = stacks[fromStack].pop();
-
 		if (movedCrate) {
 			stacks[toStack].push(movedCrate);
 		}
 	}
 }
 
-const topCrates = Object.values(stacks).reduce((crates, currentStack) => `${crates}${currentStack.at(-1)}`, '');
+// Create a string of the crates on the top of each stack
+const topCrates = Object.values(stacks).reduce((crates, currentStack) => crates.concat(currentStack.at(-1) || ''), '');
 
 console.log(topCrates); // QPJPLMNNR
