@@ -56,12 +56,11 @@ for (let i = 0; i < instructions.length; i++) {
 
 // Create a string of the crates on the top of each stack
 const topCrates = generateTopCratesString(stacksClone);
-
-// console.log(topCrates); // QPJPLMNNR
+console.log(topCrates); // QPJPLMNNR
 
 /**
  * Part 2 -  After the rearrangement procedure completes, what crate ends up on top of each stack?
- * Answer:
+ * Answer:BQDNWJPVJ
  */
 
 const stacksClone2 = deepCloneStacksData();
@@ -71,18 +70,20 @@ for (let i = 0; i < instructions.length; i++) {
 	const instructionNumbers = currentInstruction.replace(/[a-z]/gi, '');
 	const [moveQuant, fromStack, toStack] = instructionNumbers.split(' ').filter(Boolean).map(Number);
 
-	// Go over the number of crate moves per instruction and move from the designated stack to the target stack
-	const crates = stacksClone2[fromStack].splice(stacksClone2[fromStack].length - moveQuant, moveQuant);
-	stacksClone2[toStack].concat(...crates);
+	const crates = stacksClone2[fromStack].splice(-moveQuant, moveQuant);
+	stacksClone2[toStack] = [...stacksClone2[toStack], ...crates];
 }
 
 const topCrates2 = generateTopCratesString(stacksClone2);
-console.log(topCrates2);
+console.log(topCrates2); // BQDNWJPVJ
 
 /* Helpers */
 
 function deepCloneStacksData() {
-	return Object.entries(initStacks).reduce<StacksData>((acc, curr) => ({ ...acc, [curr[0]]: [...curr[1]] }), {});
+	return Object.entries(initStacks).reduce<StacksData>(
+		(stacksData, [stackKey, stackVal]) => ({ ...stacksData, [stackKey]: [...stackVal] }),
+		{}
+	);
 }
 
 function generateTopCratesString(stack: StacksData) {
