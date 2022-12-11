@@ -39,11 +39,7 @@ const instructions = inputText.split('\n');
 const stacksClone = deepCloneStacksData();
 
 for (let i = 0; i < instructions.length; i++) {
-	const currentInstruction = instructions[i];
-	// Remove the string instructions to have only the numerical data
-	const instructionNumbers = currentInstruction.replace(/[a-z]/gi, '');
-	// Remove the white-spaces and convert the data to numbers that are extracted per instruction
-	const [moveQuant, fromStack, toStack] = instructionNumbers.split(' ').filter(Boolean).map(Number);
+	const [moveQuant, fromStack, toStack] = getInstructionNumbers(instructions[i]);
 
 	// Go over the number of crate moves per instruction and move from the designated stack to the target stack
 	for (let j = 0; j < moveQuant; j++) {
@@ -66,9 +62,7 @@ console.log(topCrates); // QPJPLMNNR
 const stacksClone2 = deepCloneStacksData();
 
 for (let i = 0; i < instructions.length; i++) {
-	const currentInstruction = instructions[i];
-	const instructionNumbers = currentInstruction.replace(/[a-z]/gi, '');
-	const [moveQuant, fromStack, toStack] = instructionNumbers.split(' ').filter(Boolean).map(Number);
+	const [moveQuant, fromStack, toStack] = getInstructionNumbers(instructions[i]);
 
 	const crates = stacksClone2[fromStack].splice(-moveQuant, moveQuant);
 	stacksClone2[toStack] = [...stacksClone2[toStack], ...crates];
@@ -84,6 +78,13 @@ function deepCloneStacksData() {
 		(stacksData, [stackKey, stackVal]) => ({ ...stacksData, [stackKey]: [...stackVal] }),
 		{}
 	);
+}
+
+function getInstructionNumbers(instructionStr: string) {
+	// Remove the string instructions to have only the numerical data, i.e. 'move 1 from 3 to 2' -> 1 3 2
+	const instructionNumbers = instructionStr.replace(/[a-z]/gi, '');
+	// Remove the white-spaces and convert the data to numbers that are extracted per instruction
+	return instructionNumbers.split(' ').filter(Boolean).map(Number);
 }
 
 function generateTopCratesString(stack: StacksData) {
