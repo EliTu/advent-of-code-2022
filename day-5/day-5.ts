@@ -73,6 +73,9 @@ console.log(topCrates2); // BQDNWJPVJ
 
 /* Helpers */
 
+/**
+ * Deep clone the stacks object as well as each stack array, to get a new reference pointer for each one.
+ */
 function deepCloneStacksData() {
 	return Object.entries(initStacks).reduce<StacksData>(
 		(stacksData, [stackKey, stackVal]) => ({ ...stacksData, [stackKey]: [...stackVal] }),
@@ -80,13 +83,20 @@ function deepCloneStacksData() {
 	);
 }
 
+/**
+ * Transform the instruction string to an array of numbers that correspond to the instructions.
+ * @example getInstructionNumbers('move 1 from 3 to 2') -> [1, 3, 2]
+ */
 function getInstructionNumbers(instructionStr: string) {
-	// Remove the string instructions to have only the numerical data, i.e. 'move 1 from 3 to 2' -> 1 3 2
+	// Remove the string instructions to have only the numerical data
 	const instructionNumbers = instructionStr.replace(/[a-z]/gi, '');
 	// Remove the white-spaces and convert the data to numbers that are extracted per instruction
 	return instructionNumbers.split(' ').filter(Boolean).map(Number);
 }
 
+/**
+ * Loop over the stacks and pass the last item at the end of each stack into a string.
+ */
 function generateTopCratesString(stack: StacksData) {
 	return Object.values(stack).reduce((crates, currentStack) => crates.concat(currentStack.at(-1) || ''), '');
 }

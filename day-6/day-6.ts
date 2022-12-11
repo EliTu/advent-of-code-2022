@@ -23,7 +23,6 @@ for (let i = 0; i < signal.length; i++) {
 		break;
 	}
 }
-
 console.log(packetMarker); // 1896
 
 /**
@@ -42,7 +41,6 @@ for (let i = 0; i < signal.length; i++) {
 		break;
 	}
 }
-
 console.log(sentenceMarker); // 3452
 
 /* Helpers */
