@@ -12,18 +12,40 @@ const [signal] = inputText.split('\n');
  * Answer: 1896
  */
 
-let marker = 1;
+let packetMarker = 1;
 for (let i = 0; i < signal.length; i++) {
-	const isUnique = isCharSequenceUnique([signal[i], signal[i + 1], signal[i + 2], signal[i + 3]]);
+	const charsSlice = getSignalSlice(i, 4);
+	const isUnique = isCharSequenceUnique([...charsSlice]);
 	if (isUnique) {
-		marker += i + 3;
+		packetMarker += i + 3;
 		break;
 	}
 }
 
-console.log(marker); // 1896
+console.log(packetMarker); // 1896
+
+/**
+ * Part 2 - How many characters need to be processed before the first start-of-message marker is detected?
+ * Answer:
+ */
+
+let sentenceMarker = 1;
+for (let i = 0; i < signal.length; i++) {
+	const charsSlice = getSignalSlice(i, 14);
+	const isUnique = isCharSequenceUnique([...charsSlice]);
+	if (isUnique) {
+		sentenceMarker += i + 13;
+		break;
+	}
+}
+
+console.log(sentenceMarker);
 
 /* Helpers */
+
+function getSignalSlice(start: number, end: number) {
+	return signal.slice(start, start + end);
+}
 
 function isCharSequenceUnique(chars: string[]) {
 	const record: Record<string, string> = {};
