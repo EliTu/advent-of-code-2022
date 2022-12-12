@@ -7,14 +7,14 @@ import { readFileSync } from 'fs';
 const inputText = readFileSync('./input.txt', 'utf-8');
 const treesMap = inputText.split('\n');
 
-let visibleTreeCounter = treesMap[0].length * 4;
+let visibleTreeCounter = treesMap[0].length * 2 + treesMap.length * 2 - 4;
 
-console.log(visibleTreeCounter);
-
-for (let i = 1; i < treesMap.length; i++) {
+for (let i = 1; i < treesMap.slice(0, 2).length - 1; i++) {
 	const currentTreesRow = treesMap[i];
 
-	for (let j = 1; j < currentTreesRow.length; j++) {
+	console.log(treesMap[i], treesMap.slice(0, 1).length - 1);
+
+	for (let j = 1; j < currentTreesRow.length - 1; j++) {
 		const currentTree = Number(currentTreesRow[j]);
 
 		if (currentTree === 0) continue;
@@ -24,7 +24,7 @@ for (let i = 1; i < treesMap.length; i++) {
 		const topTree = Number(treesMap[i - 1][j]);
 		const bottomTree = Number(treesMap?.[i + 1]?.[j] || 0);
 
-		if ([leftTree, rightTree, topTree, bottomTree].some((tree) => tree < currentTree)) {
+		if ([leftTree, rightTree, topTree, bottomTree].some((tree) => currentTree > tree)) {
 			visibleTreeCounter += 1;
 		}
 	}
